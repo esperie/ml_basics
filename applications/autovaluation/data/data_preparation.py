@@ -72,6 +72,9 @@ date_dict = {dt: idx for idx, dt in enumerate(dates)}
 with open(config.DATA_PATH / 'date_dict.pkl', 'wb') as f:
 	pickle.dump(date_dict, f)
 
+with open(config.DATA_PATH / 'date_dict.pkl', 'rb') as f:
+	date_dict = pickle.load(f)
+
 # ## Apply the date dictionary to the dataframe and call this date feature
 # ## date_id.
 data['date_id'] = data.sale_date.apply(lambda x: date_dict[x])

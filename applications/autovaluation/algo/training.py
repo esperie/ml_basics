@@ -1,7 +1,6 @@
 import pandas as pd
 from datetime import datetime, date, time, timedelta
 from pycaret.regression import RegressionExperiment
-
 import config
 
 # Retrieve the prepped data
@@ -9,20 +8,23 @@ data = pd.read_parquet(config.DATA_PATH / 'prepped_data.parquet')
 
 # Setup the experiment
 s = RegressionExperiment()
-s.setup(data, target='price_psf',
-        ignore_features=['project_name', 'address', 'num_units',
-                         'transacted_price', 'nett_price', 'price_psm',
-                         'tenure', 'postal_code'],
-        date_features=['sale_date'],
-        normalize=True,
-        log_experiment=True,
-        experiment_name=f'autovaluation_{datetime.now().strftime("%Y%m%d_%H%M%S")}'
-        )
+s.setup(
+	data,
+	target='price_psf',
+	ignore_features=[
+		'project_name', 'address', 'num_units', 'transacted_price',
+		'nett_price', 'price_psm', 'tenure', 'postal_code'],
+	date_features=['sale_date'],
+	normalize=True,
+	log_experiment=True,
+	experiment_name=f'autovaluation_{datetime.now().strftime("%Y%m%d_%H%M%S")}'
+)
 
 # Compare the performance of all the models and select the best one
 best = s.compare_models()
 
 # Check the 10-fold cross validation results of the best model
+# ## to check the consistency of the model results
 s.create_model('catboost')
 
 # Inspect the feature importance to see if we can craft a sensible story
